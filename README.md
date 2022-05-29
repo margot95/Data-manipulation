@@ -25,31 +25,14 @@ prices = scraped.select(".price_color")
 for price in prices:
     price = float(price.text.lstrip("£"))
     
- 
-#make a title-price dict   
-titles_prices = []
+#make a title-price-availability dict (title-price tuple as key, availability status as value) 
+titles_prices_availability = []
 articles = scraped.select(".product_pod")
 
 for article in articles:
     titles = article.h3.a["title"]
     prices = article.find("p", class_="price_color")
     prices_float = float(prices.text.lstrip("£"))
-    titles_prices.append({titles: prices_float})
-
-titles_availability = []
-
-articles = scraped.select(".product_pod")
-
-#make a title-availability dict
-for article in articles:
-    titles = article.h3.a["title"]
     availability = article.find("p", class_="instock availability").text.strip()
-    titles_availability.append({titles: availability})
-
-#make a title-price-availability dict
-my_dict = {}
-for title in titles:
-    tuple = (titles,prices_float)
-    #my_dict.update({tuple : availability})  same as previous line
-    my_dict[tuple]=availability
-print(my_dict)
+    title_price = (titles, prices_float)
+    titles_prices_availability.append({title_price:availability})
